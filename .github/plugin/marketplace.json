@@ -1,0 +1,26 @@
+{
+  "name": "dev-suq",
+  "metadata": {
+    "description": "Curated plugins for the Single Front Door development team",
+    "version": "1.0.0"
+  },
+  "owner": {
+    "name": "Rana Salem"
+  },
+  "plugins": [
+    {
+      "name": "nodejs-sonarqube-cloud",
+      "description": "Runs SonarQube Cloud scans locally, triages all issues, and implements fixes automatically. Pairs with a bundled zero-dependency sonar-scan.js script.",
+      "source": "plugins/nodejs-sonarqube-cloud/nodejs-sonarqube-cloud.agent.md",
+      "scripts": [
+        "plugins/nodejs-sonarqube-cloud/scripts/sonar-scan.js"
+      ],
+      "prerequisites": [
+        "Docker (running)",
+        "Node.js",
+        "sonar-project.properties in project root",
+        "SONAR_TOKEN in .env"
+      ]
+    }
+  ]
+}
