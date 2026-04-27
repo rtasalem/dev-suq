@@ -1,0 +1,25 @@
+{
+  "name": "nodejs-sonarqube-cloud",
+  "description": "An agent that analyses SonarQube Cloud quality gate results from the CI pipeline, triages all issues, and implements fixes automatically. Includes a skill for running local scans via sonar-scanner-cli.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Rana Salem"
+  },
+  "license": "MIT",
+  "keywords": [
+    "sonarqube",
+    "sonarcloud",
+    "code-quality",
+    "security",
+    "nodejs",
+    "static-analysis"
+  ],
+  "agents": "agents/",
+  "skills": "skills/",
+  "prerequisites": [
+    "gh CLI (authenticated)",
+    "Node.js",
+    "sonar-project.properties in project root",
+    "SONAR_TOKEN in .env"
+  ]
+}
