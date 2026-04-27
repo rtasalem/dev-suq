@@ -1,6 +1,6 @@
 {
   "name": "nodejs-sonarqube-cloud",
-  "description": "An agent that scans the codebase of any Node.js project using the sonar-scanner-cli to identify, prioritise, and resolve issues, security hotspots, code smells, and more.",
+  "description": "An agent that analyses SonarQube Cloud quality gate results from the CI pipeline, triages all issues, and implements fixes automatically. Includes a skill for running local scans via sonar-scanner-cli.",
   "version": "1.0.0",
   "author": {
     "name": "Rana Salem"
@@ -15,9 +15,9 @@
     "static-analysis"
   ],
   "agents": "agents/",
-  "scripts": "scripts/",
+  "skills": "skills/",
   "prerequisites": [
-    "Docker (running)",
+    "gh CLI (authenticated)",
     "Node.js",
     "sonar-project.properties in project root",
     "SONAR_TOKEN in .env"

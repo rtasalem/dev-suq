@@ -1,7 +1,7 @@
 {
   "name": "dev-suq",
   "metadata": {
-    "description": "Curated plugins for the Single Front Door development team",
+    "description": "Open source collection of GitHub Copilot plugins, agents, skills, and prompts",
     "version": "1.0.0"
   },
   "owner": {
@@ -10,13 +10,14 @@
   "plugins": [
     {
       "name": "nodejs-sonarqube-cloud",
-      "description": "Runs SonarQube Cloud scans locally, triages all issues, and implements fixes automatically. Pairs with a bundled zero-dependency sonar-scan.js script.",
-      "source": "plugins/nodejs-sonarqube-cloud/nodejs-sonarqube-cloud.agent.md",
-      "scripts": [
-        "plugins/nodejs-sonarqube-cloud/scripts/sonar-scan.js"
+      "description": "An agent that analyses SonarQube Cloud quality gate results from the CI pipeline, triages all issues, and implements fixes automatically. Includes a skill for running local scans via sonar-scanner-cli.",
+      "version": "1.0.0",
+      "source": "./plugins/nodejs-sonarqube-cloud",
+      "skills": [
+        "plugins/nodejs-sonarqube-cloud/skills/nodejs-local-sonar-scan"
       ],
       "prerequisites": [
-        "Docker (running)",
+        "gh CLI (authenticated)",
         "Node.js",
         "sonar-project.properties in project root",
         "SONAR_TOKEN in .env"
