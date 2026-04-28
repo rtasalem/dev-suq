@@ -11,7 +11,7 @@ An agent that analyses SonarQube Cloud quality gate results from the CI pipeline
 
 ## Prerequisites
 
-- [gh CLI](https://cli.github.com/) (authenticated)
+- [GitHub CLI](https://cli.github.com/) (authenticated)
 - [Node.js](https://nodejs.org/)
 - `sonar-project.properties` in the project root (must contain `sonar.projectKey`)
 - `SONAR_TOKEN` set in `.env` or the environment
