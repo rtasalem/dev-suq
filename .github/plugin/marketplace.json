@@ -2,7 +2,7 @@
   "name": "dev-suq",
   "metadata": {
     "description": "Open source collection of GitHub Copilot plugins, agents, skills, and prompts",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "owner": {
     "name": "Rana Salem"

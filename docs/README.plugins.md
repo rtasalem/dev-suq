@@ -8,7 +8,6 @@ To install a plugin using Copilot CLI:
 
 ```bash
 copilot plugin install <plugin-name>@dev-suq
-
 ```
 
 ## Available plugins
