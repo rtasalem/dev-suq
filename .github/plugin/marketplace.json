@@ -2,7 +2,7 @@
   "name": "dev-suq",
   "metadata": {
     "description": "Open source collection of GitHub Copilot plugins, agents, skills, and prompts",
-    "version": "1.0.1"
+    "version": "1.1.0"
   },
   "owner": {
     "name": "Rana Salem"
@@ -13,6 +13,12 @@
       "description": "An agent that analyses SonarQube Cloud quality gate results from the CI pipeline, triages all issues, and implements fixes automatically. Includes a skill for running local scans via sonar-scanner-cli.",
       "version": "1.0.0",
       "source": "./plugins/nodejs-sonarqube-cloud"
+    },
+    {
+      "name": "asyncapi-drift-detection",
+      "description": "Detects drift between AsyncAPI spec (version 3.x) and service implementation, prioritises findings in order of severity, and proposes fixes to ensure service implementation is accurately reflected in its documentation.",
+      "version": "1.0.0",
+      "source": "./plugins/asyncapi-drift-detection"
     }
   ]
 }
