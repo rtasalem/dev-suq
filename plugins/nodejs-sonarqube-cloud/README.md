@@ -2,7 +2,7 @@
 
 An agent that analyses SonarQube Cloud quality gate results from the CI pipeline, triages all issues, and implements fixes automatically. Includes a skill for running local scans via `sonar-scanner-cli`.
 
-## What's Included
+## What's included
 
 | Component | Path | Description |
 |-----------|------|-------------|
@@ -17,9 +17,9 @@ An agent that analyses SonarQube Cloud quality gate results from the CI pipeline
 - `SONAR_TOKEN` set in `.env` or the environment
 - [Docker](https://www.docker.com/) (for local scans only)
 
-## How It Works
+## How it works
 
-### Agent: SonarQube Cloud Issue Fixer
+### Agent: SonarQube Cloud issue fixer
 
 Triggered when a SonarQube Cloud quality gate fails on a pull request. The agent:
 
@@ -29,7 +29,7 @@ Triggered when a SonarQube Cloud quality gate fails on a pull request. The agent
 4. Implements fixes directly in the codebase following SonarQube Cloud's recommendations
 5. Reports a summary and prompts you to push so CI can re-verify
 
-### Skill: Local Sonar Scan
+### Skill: Local Sonar scan
 
 Run a local scan to verify fixes before pushing:
 

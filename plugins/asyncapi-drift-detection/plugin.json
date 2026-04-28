@@ -1,0 +1,15 @@
+{
+  "name": "asyncapi-drift-detection",
+  "description": "Detects drift between AsyncAPI spec (version 3.x) and service implementation, prioritises findings in order of severity, and proposes fixes to ensure service implementation is accurately reflected in its documentation.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Rana Salem"
+  },
+  "license": "MIT",
+  "keywords": [
+    "asyncapi",
+    "documentation"
+  ],
+  "agents": "agents/",
+  "skills": "skills/"
+}
