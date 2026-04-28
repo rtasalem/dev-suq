@@ -9,3 +9,4 @@ The Dev Suq is an open-source Copilot plugin marketplace for software developers
 | Resource | Description | Index |
 | -------- | ----------- | ----- |
 | 🔌 Plugins | Custom agents with supplementary skills to support niche workflows. | [View plugins &rarr;](./docs/README.plugins.md) |
+| 🧠 Skills | Custom agents with supplementary skills to support niche workflows. | [View skills &rarr;](./docs/README.skills.md) |
