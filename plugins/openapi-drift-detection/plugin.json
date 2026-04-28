@@ -1,0 +1,15 @@
+{
+  "name": "openapi-drift-detection",
+  "description": "Detects drift between OpenAPI spec and service implementation, prioritises findings in order of severity, and proposes fixes to ensure service implementation is accurately reflected in its documentation.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Rana Salem"
+  },
+  "license": "MIT",
+  "keywords": [
+    "openapi",
+    "documentation"
+  ],
+  "agents": "agents/",
+  "skills": "skills/"
+}
