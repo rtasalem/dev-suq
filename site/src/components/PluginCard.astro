@@ -1,0 +1,88 @@
+---
+import type { PluginCardData } from '../types/plugin';
+
+interface Props {
+  plugin: PluginCardData;
+}
+
+const { plugin } = Astro.props;
+
+// Fewer keywords → more room for description → more lines shown
+const clampLines = plugin.keywords.length <= 2 ? 5
+  : plugin.keywords.length <= 4 ? 4
+  : 3;
+---
+
+<button
+  class="plugin-card"
+  data-plugin={plugin.name}
+  aria-label={`View details for ${plugin.name}`}
+  type="button"
+>
+  <h2 class="card-title">{plugin.name}</h2>
+  <p class="card-description" style={`-webkit-line-clamp: ${clampLines}; line-clamp: ${clampLines};`}>{plugin.description}</p>
+  <div class="card-tags">
+    {plugin.keywords.map((kw) => (
+      <span class="tag">{kw}</span>
+    ))}
+  </div>
+</button>
+
+<style>
+  .plugin-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    height: 100%;
+    font: inherit;
+    color: var(--color-text);
+    transition: box-shadow var(--transition-fast),
+      transform var(--transition-fast),
+      border-color var(--transition-fast);
+  }
+
+  .plugin-card:hover {
+    box-shadow: var(--shadow-card-hover), 0 0 0 1px var(--color-accent), 0 0 20px color-mix(in srgb, var(--color-accent) 20%, transparent);
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+
+  .card-description {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: auto;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+  }
+</style>

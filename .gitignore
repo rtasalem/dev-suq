@@ -1,2 +1,7 @@
 .DS_Store
 .github/prompts
+
+# Astro site
+site/node_modules
+site/dist
+site/.astro

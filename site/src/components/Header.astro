@@ -1,0 +1,83 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+---
+
+<header class="header">
+  <div class="header-glow" aria-hidden="true"></div>
+  <div class="header-inner container">
+    <div class="brand">
+      <h1 class="brand-title">Dev Suq</h1>
+      <p class="brand-tagline">An open-source Copilot plugin marketplace for software developers, making available plugins to support a hybrid agentic-developer workflow.</p>
+      <p class="brand-etymology">In Arabic, the suq (pronounced "sook" like "book") is a marketplace or bazaar.</p>
+    </div>
+    <ThemeToggle />
+  </div>
+</header>
+
+<style>
+  .header {
+    position: relative;
+    padding: 2rem 0 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 2.5rem;
+    overflow: hidden;
+  }
+
+  /* Animated ambient glow behind the header */
+  .header-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse 60% 120% at 50% -10%,
+      var(--color-accent) 0%,
+      transparent 70%
+    );
+    opacity: 0.12;
+    animation: glow-pulse 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  [data-theme="dark"] .header-glow {
+    opacity: 0.18;
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.12; transform: scaleX(1); }
+    50%       { opacity: 0.2;  transform: scaleX(1.08); }
+  }
+
+  [data-theme="dark"] @keyframes glow-pulse {
+    0%, 100% { opacity: 0.18; transform: scaleX(1); }
+    50%       { opacity: 0.28; transform: scaleX(1.08); }
+  }
+
+  .header-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .brand-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .brand-tagline {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+    max-width: 600px;
+    line-height: 1.5;
+  }
+
+  .brand-etymology {
+    color: var(--color-text-muted);
+    font-size: 0.72rem;
+    margin-top: 0.25rem;
+    opacity: 0.65;
+    font-style: italic;
+  }
+</style>

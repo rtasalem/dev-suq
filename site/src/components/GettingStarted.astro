@@ -1,0 +1,112 @@
+---
+const command = 'copilot plugin marketplace add rtasalem/dev-suq';
+---
+
+<section class="getting-started">
+  <h2 class="gs-title">Get started</h2>
+  <p class="gs-description">Add Dev Suq to your list of marketplaces.</p>
+  <div class="gs-code-block">
+    <code class="gs-command" id="gs-command">{command}</code>
+    <button class="gs-copy-btn" id="gs-copy-btn" type="button" aria-label="Copy command">
+      <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+      </svg>
+      <span class="gs-copy-label">Copy</span>
+    </button>
+  </div>
+</section>
+
+<script>
+  class GettingStartedCopy {
+    private btn: HTMLButtonElement;
+    private cmd: HTMLElement;
+
+    constructor() {
+      this.btn = document.getElementById('gs-copy-btn') as HTMLButtonElement;
+      this.cmd = document.getElementById('gs-command')!;
+      this.btn.addEventListener('click', () => this.copy());
+    }
+
+    private async copy(): Promise<void> {
+      await navigator.clipboard.writeText(this.cmd.textContent ?? '');
+      const label = this.btn.querySelector('.gs-copy-label')!;
+      label.textContent = 'Copied!';
+      this.btn.classList.add('copied');
+      setTimeout(() => {
+        label.textContent = 'Copy';
+        this.btn.classList.remove('copied');
+      }, 2000);
+    }
+  }
+
+  new GettingStartedCopy();
+</script>
+
+<style>
+  .getting-started {
+    margin-bottom: 2.5rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .gs-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .gs-description {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  .gs-code-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background: var(--color-code-bg);
+    color: var(--color-code-text);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    margin-top: 0.25rem;
+  }
+
+  .gs-command {
+    font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+  }
+
+  .gs-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-family: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--color-code-text);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .gs-copy-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .gs-copy-btn.copied {
+    color: #22c55e;
+    border-color: #22c55e;
+  }
+</style>
