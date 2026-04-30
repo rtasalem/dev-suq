@@ -1,0 +1,345 @@
+---
+import type { PluginModalData } from '../types/plugin';
+
+interface Props {
+  plugins: PluginModalData[];
+}
+
+const { plugins } = Astro.props;
+---
+
+<div class="modal-backdrop" id="modal-backdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="modal-close" aria-label="Close modal" type="button">&times;</button>
+    <h2 class="modal-title" id="modal-title"></h2>
+    <p class="modal-description" id="modal-description"></p>
+
+    <div class="modal-meta">
+      <span class="meta-item" id="modal-version"></span>
+      <span class="meta-item" id="modal-license"></span>
+      <span class="meta-item" id="modal-author"></span>
+    </div>
+
+    <div class="modal-tags" id="modal-tags"></div>
+
+    <div class="modal-prereqs" id="modal-prereqs-section">
+      <h3 class="section-label">Prerequisites</h3>
+      <ul id="modal-prereqs"></ul>
+    </div>
+
+    <div class="modal-install">
+      <div class="install-header">
+        <h3 class="section-label">Install</h3>
+        <button class="copy-btn" id="modal-copy-btn" type="button" aria-label="Copy install command">
+          <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-label">Copy</span>
+        </button>
+      </div>
+      <pre><code id="modal-install-cmd"></code></pre>
+    </div>
+  </div>
+</div>
+
+<!-- Embed plugin data for client-side access -->
+<script define:vars={{ plugins }}>
+  window.__PLUGINS__ = plugins;
+</script>
+
+<script>
+  interface PluginData {
+    name: string;
+    description: string;
+    version: string;
+    license: string;
+    author: string;
+    keywords: string[];
+    prerequisites: string[];
+    installCommand: string;
+  }
+
+  class ModalController {
+    private backdrop: HTMLElement;
+    private titleEl: HTMLElement;
+    private descEl: HTMLElement;
+    private versionEl: HTMLElement;
+    private licenseEl: HTMLElement;
+    private authorEl: HTMLElement;
+    private tagsEl: HTMLElement;
+    private prereqsSection: HTMLElement;
+    private prereqsList: HTMLElement;
+    private installCmd: HTMLElement;
+    private closeBtn: HTMLElement;
+    private copyBtn: HTMLElement;
+    private plugins: PluginData[];
+
+    constructor() {
+      this.backdrop = document.getElementById('modal-backdrop')!;
+      this.titleEl = document.getElementById('modal-title')!;
+      this.descEl = document.getElementById('modal-description')!;
+      this.versionEl = document.getElementById('modal-version')!;
+      this.licenseEl = document.getElementById('modal-license')!;
+      this.authorEl = document.getElementById('modal-author')!;
+      this.tagsEl = document.getElementById('modal-tags')!;
+      this.prereqsSection = document.getElementById('modal-prereqs-section')!;
+      this.prereqsList = document.getElementById('modal-prereqs')!;
+      this.installCmd = document.getElementById('modal-install-cmd')!;
+      this.closeBtn = this.backdrop.querySelector('.modal-close')!;
+      this.copyBtn = document.getElementById('modal-copy-btn')!;
+      this.plugins = (window as any).__PLUGINS__ as PluginData[];
+
+      this.bindEvents();
+    }
+
+    private bindEvents(): void {
+      // Card clicks
+      document.querySelectorAll('.plugin-card').forEach((card) => {
+        card.addEventListener('click', () => {
+          const name = (card as HTMLElement).dataset.plugin;
+          if (name) this.open(name);
+        });
+      });
+
+      // Copy button
+      this.copyBtn.addEventListener('click', () => this.copyInstallCommand());
+
+      // Close handlers
+      this.closeBtn.addEventListener('click', () => this.close());
+      this.backdrop.addEventListener('click', (e) => {
+        if (e.target === this.backdrop) this.close();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') this.close();
+      });
+    }
+
+    private async copyInstallCommand(): Promise<void> {
+      const command = this.installCmd.textContent ?? '';
+      await navigator.clipboard.writeText(command);
+      const label = this.copyBtn.querySelector('.copy-label')!;
+      label.textContent = 'Copied!';
+      this.copyBtn.classList.add('copied');
+      setTimeout(() => {
+        label.textContent = 'Copy';
+        this.copyBtn.classList.remove('copied');
+      }, 2000);
+    }
+
+    private open(pluginName: string): void {
+      const plugin = this.plugins.find((p) => p.name === pluginName);
+      if (!plugin) return;
+
+      this.titleEl.textContent = plugin.name;
+      this.descEl.textContent = plugin.description;
+      this.versionEl.textContent = plugin.version;
+      this.licenseEl.textContent = plugin.license;
+      this.authorEl.textContent = plugin.author;
+      this.installCmd.textContent = plugin.installCommand;
+
+      // Keywords
+      this.tagsEl.innerHTML = plugin.keywords
+        .map((kw) => `<span class="tag">${kw}</span>`)
+        .join('');
+
+      // Prerequisites
+      if (plugin.prerequisites.length > 0) {
+        this.prereqsSection.style.display = 'block';
+        this.prereqsList.innerHTML = plugin.prerequisites
+          .map((p) => `<li>${p}</li>`)
+          .join('');
+      } else {
+        this.prereqsSection.style.display = 'none';
+      }
+
+      this.backdrop.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    private close(): void {
+      this.backdrop.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+  }
+
+  new ModalController();
+</script>
+
+<style>
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-backdrop);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-normal), visibility var(--transition-normal);
+  }
+
+  .modal-backdrop[aria-hidden="false"] {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal {
+    position: relative;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-modal);
+    padding: 2rem;
+    max-width: 560px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    transform: scale(0.95);
+    transition: transform var(--transition-normal);
+  }
+
+  .modal-backdrop[aria-hidden="false"] .modal {
+    transform: scale(1);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: var(--color-text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: color var(--transition-fast), background var(--transition-fast);
+  }
+
+  .modal-close:hover {
+    color: var(--color-text);
+    background: var(--color-surface-hover);
+  }
+
+  .modal-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    margin-bottom: 0.75rem;
+    padding-right: 2rem;
+  }
+
+  .modal-description {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .modal-meta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    background: var(--color-accent-light);
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .modal-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .modal-tags :global(.tag) {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+  }
+
+  .modal-prereqs {
+    margin-bottom: 1.25rem;
+  }
+
+  .modal-prereqs ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  .modal-prereqs li {
+    margin-bottom: 0.25rem;
+  }
+
+  .section-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-install pre {
+    margin: 0;
+  }
+
+  .install-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  .install-header .section-label {
+    margin-bottom: 0;
+  }
+
+  .copy-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-family: inherit;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .copy-btn:hover {
+    background: var(--color-surface-hover);
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .copy-btn.copied {
+    color: #22c55e;
+    border-color: #22c55e;
+  }
+
+  .copy-icon {
+    flex-shrink: 0;
+  }
+</style>

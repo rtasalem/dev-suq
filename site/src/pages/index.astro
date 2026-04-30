@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import GettingStarted from '../components/GettingStarted.astro';
+import PluginCard from '../components/PluginCard.astro';
+import PluginModal from '../components/PluginModal.astro';
+import { getPluginCards, getPluginModals } from '../utils/plugins';
+
+const cards = getPluginCards();
+const modals = getPluginModals();
+---
+
+<Base title="Dev Suq — Copilot Plugin Marketplace">
+  <Header />
+  <main class="container">
+    <GettingStarted />
+    <section class="card-grid">
+      {cards.map((plugin, i) => (
+        <div class="card-wrapper" style={`--delay: ${i * 80}ms`}>
+          <PluginCard plugin={plugin} />
+        </div>
+      ))}
+    </section>
+    <PluginModal plugins={modals} />
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding-bottom: 3rem;
+  }
+
+  @media (min-width: 640px) {
+    .card-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 960px) {
+    .card-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .card-wrapper {
+    animation: card-enter 0.45s ease both;
+    animation-delay: var(--delay, 0ms);
+    display: flex;
+  }
+
+  @keyframes card-enter {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
