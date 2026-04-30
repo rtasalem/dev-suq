@@ -14,5 +14,6 @@ copilot plugin install <plugin-name>@dev-suq
 
 | Plugin | Description | Install |
 |--------|-------------| ------- |
-| [nodejs-sonarqube-cloud](../plugins/nodejs-sonarqube-cloud/README.md) | Analyses SonarQube Cloud quality gate results from the CI pipeline, triages all issues, and implements fixes automatically. Includes a skill for running local scans via `sonar-scanner-cli`. | `copilot plugin install nodejs-sonarqube-cloud@dev-suq` |
 | [asyncapi-drift-detection](../plugins/asyncapi-drift-detection/README.md) | Detects drift between AsyncAPI spec (version 3.x) and service implementation, prioritises findings in order of severity, and proposes fixes to ensure service implementation is accurately reflected in its documentation. | `copilot plugin install asyncapi-drift-detection@dev-suq` |
+| [nodejs-sonarqube-cloud](../plugins/nodejs-sonarqube-cloud/README.md) | Analyses SonarQube Cloud quality gate results from the CI pipeline, triages all issues, and implements fixes automatically. Includes a skill for running local scans via `sonar-scanner-cli`. | `copilot plugin install nodejs-sonarqube-cloud@dev-suq` |
+| [openapi-drift-detection](../plugins/openapi-drift-detection/README.md) | Detects drift between OpenAPI spec and service implementation, prioritises findings in order of severity, and proposes fixes to ensure service implementation is accurately reflected in its documentation. | `copilot plugin install openapi-drift-detection@dev-suq` |
