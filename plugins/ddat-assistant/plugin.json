@@ -1,0 +1,11 @@
+{
+  "name": "ddat-assistant",
+  "description": "An agent that will review work completed for a Jira ticket and determine against the DDaT marking scheme where the work fits in as a good example for DDaT assessments.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Rana Salem"
+  },
+  "license": "MIT",
+  "agents": "agents/",
+  "skills": "skills/"
+}
