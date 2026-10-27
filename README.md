@@ -2,11 +2,29 @@
 
 In Arabic, the suq (pronouced "sook" like "book") is a marketplace or bazaar.
 
-The Dev Suq is an open-source Copilot plugin marketplace for software developers, making available plugins to support a hybrid agentic-developer workflow.
+The Dev Suq is an open-source Claude Code and GitHub Copilot plugin marketplace for software developers, making available plugins to support a hybrid agentic-developer workflow.
 
 ##  Usage 
 
-### Add marketplace
+### Claude Code
+
+Add the Dev Suq marketplace:
+
+```
+/plugin marketplace add rtasalem/dev-suq
+```
+
+Install a plugin:
+
+```
+/plugin install <plugin-name>@dev-suq
+```
+
+Run `/plugin` and open the **Discover** tab to browse what's available. Not every plugin supports Claude Code yet; check the [plugin index](./docs/README.plugins.md).
+
+### GitHub Copilot CLI
+
+#### Add marketplace
 
 Add the Dev Suq marketplace to Copilot CLI:
 
@@ -14,7 +32,7 @@ Add the Dev Suq marketplace to Copilot CLI:
 copilot plugin marketplace add rtasalem/dev-suq
 ```
 
-### Browsing
+#### Browsing
 
 Browse all plugins in the Dev Suq marketplace:
 
@@ -22,7 +40,7 @@ Browse all plugins in the Dev Suq marketplace:
 copilot plugin marketplace browse dev-suq
 ```
 
-### Installing plugins
+#### Installing plugins
 
 Install plugins via the Copilot CLI:
 

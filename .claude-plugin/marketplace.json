@@ -1,0 +1,32 @@
+{
+  "name": "dev-suq",
+  "owner": {
+    "name": "Rana Salem"
+  },
+  "metadata": {
+    "description": "Open source collection of Claude Code and GitHub Copilot plugins, agents, and skills",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "repo-dossier",
+      "description": "Analyses any repository in any language and produces an evidence-cited markdown dossier — purpose, architecture, annotated execution traces, external integrations, CI/CD, maintainers, conventions, and a SWOT analysis — plus a guided reading itinerary and an interactive code tour.",
+      "version": "1.0.0",
+      "source": "./plugins/repo-dossier",
+      "author": {
+        "name": "Rana Salem"
+      },
+      "license": "MIT",
+      "keywords": [
+        "onboarding",
+        "codebase-analysis",
+        "documentation",
+        "code-review",
+        "architecture",
+        "swot",
+        "polyglot"
+      ],
+      "category": "documentation"
+    }
+  ]
+}

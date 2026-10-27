@@ -4,11 +4,38 @@ Point it at any repository in any language. It reads the whole thing and leaves 
 
 Built for the way engineers actually learn a codebase: by reading all of it, in the right order.
 
+Works with both **Claude Code** and **GitHub Copilot CLI**.
+
+## Install
+
+### Claude Code
+
+```
+/plugin install repo-dossier --marketplace rtasalem/dev-suq
+```
+
+On older Claude Code versions, add the marketplace first:
+
+```
+/plugin marketplace add rtasalem/dev-suq
+/plugin install repo-dossier@dev-suq
+```
+
+Once installed, the skills are also available as slash commands: `/repo-dossier:repo-dossier` and `/repo-dossier:codebase-tour`.
+
+### GitHub Copilot CLI
+
+```
+copilot plugin marketplace add rtasalem/dev-suq
+copilot plugin install repo-dossier@dev-suq
+```
+
 ## What's included
 
 | Component | Path | Description |
 |-----------|------|-------------|
-| Agent | `agents/repo-dossier.agent.md` | Analyses a repository exhaustively and generates an 11-chapter, evidence-cited markdown dossier. Every claim is anchored to a `path:line`; anything unverifiable goes to Open Questions rather than into prose |
+| Agent (Copilot) | `agents/repo-dossier.agent.md` | Analyses a repository exhaustively and generates an 11-chapter, evidence-cited markdown dossier. Every claim is anchored to a `path:line`; anything unverifiable goes to Open Questions rather than into prose |
+| Agent (Claude Code) | `claude/agents/repo-dossier.md` | The same agent with Claude Code tool and model settings. Runs in its own context and writes every chapter itself, because Claude Code subagents can't delegate further |
 | Skill | `skills/repo-dossier/` | The 13-step analysis procedure, with six reference docs covering repository acquisition, 13 language ecosystems, git investigation commands, evidence standards, a SWOT detection catalogue, and chapter templates |
 | Skill | `skills/codebase-tour/` | Interactive walkthrough that follows the generated reading path file by file, stopping after each stop so you can ask questions |
 
@@ -58,6 +85,13 @@ The repeatable procedure behind the agent. Reference docs:
 ### Skill: codebase-tour
 
 Reads `10-reading-path.md` and walks you through the code one stop at a time. Presents a file, connects it to the previous stop, shows the code that matters, flags external boundaries — then stops and waits. Supports `next`, `back`, `skip`, jumping to any sitting, "go deeper on X", "what calls this?", and "show me the tests". Each sitting closes with a checkpoint question you should now be able to answer.
+
+### Claude Code vs Copilot
+
+The skills and reference docs are shared by both tools. The difference is where the work runs:
+
+- **Claude Code**: asking for a dossier in the main conversation runs the `repo-dossier` skill there, so chapters 04, 06 and 09 can go to parallel subagents and the tour can start straight after. If Claude hands the job to the `repo-dossier` subagent instead, that subagent writes every chapter in sequence and returns the report. Then you say "walk me through the code" to start the tour
+- **Copilot**: the `repo-dossier` agent runs the whole procedure and offers the tour itself
 
 ## Why it stays specific
 

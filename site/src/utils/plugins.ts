@@ -25,6 +25,10 @@ export function getPluginCards(): PluginCardData[] {
   }));
 }
 
+function supportsClaude(pluginName: string): boolean {
+  return fs.existsSync(path.join(PLUGINS_DIR, pluginName, '.claude-plugin', 'plugin.json'));
+}
+
 export function getPluginModals(): PluginModalData[] {
   return loadPluginManifests().map((plugin) => ({
     name: plugin.name,
@@ -34,6 +38,11 @@ export function getPluginModals(): PluginModalData[] {
     author: plugin.author.name,
     keywords: plugin.keywords,
     prerequisites: plugin.prerequisites ?? [],
-    installCommand: `copilot plugin install ${plugin.name}@${MARKETPLACE_NAME}`,
+    installCommands: {
+      copilot: `copilot plugin install ${plugin.name}@${MARKETPLACE_NAME}`,
+      claude: supportsClaude(plugin.name)
+        ? `/plugin install ${plugin.name}@${MARKETPLACE_NAME}`
+        : undefined,
+    },
   }));
 }
