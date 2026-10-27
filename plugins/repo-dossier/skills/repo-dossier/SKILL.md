@@ -94,7 +94,7 @@ Append each trace as you finish it. Flip the ledger rows for every file the trac
 
 ### Step 4 — Data & Configuration → `04-data-config.md`
 
-Delegate to a subagent — this chapter is self-contained.
+Delegate to a subagent — this chapter is self-contained. If you are already running as a subagent and cannot delegate further, do it inline.
 
 1. **Data models**: schemas, entities, migrations, and how they evolved
 2. **Persistence**: every query or ORM call, where it lives, what it touches
@@ -115,7 +115,7 @@ Consumes the boundary crossings recorded in Step 3.
 
 ### Step 6 — Delivery → `06-delivery.md`
 
-Delegate to a subagent — this chapter is self-contained.
+Delegate to a subagent — this chapter is self-contained. If you are already running as a subagent and cannot delegate further, do it inline.
 
 1. **Build**: toolchain, how an artefact is produced, containerisation
 2. **Test**: frameworks, layout, what is actually covered versus what exists, how to run them
@@ -126,7 +126,7 @@ Delegate to a subagent — this chapter is self-contained.
 
 ### Step 7 — History & Ownership → `09-ownership.md`
 
-Delegate to a subagent — this chapter is self-contained. Commands in [investigation-commands.md](./references/investigation-commands.md); every one is annotated for blobless-clone safety.
+Delegate to a subagent — this chapter is self-contained. If you are already running as a subagent and cannot delegate further, do it inline. Commands in [investigation-commands.md](./references/investigation-commands.md); every one is annotated for blobless-clone safety.
 
 1. `CODEOWNERS`, `MAINTAINERS`, and any governance docs
 2. Overall contributor ranking, and **per-area** ownership for each significant directory

@@ -1,20 +1,28 @@
 ---
-const command = 'copilot plugin marketplace add rtasalem/dev-suq';
+const commands = [
+  { id: 'claude', label: 'Claude Code', command: '/plugin marketplace add rtasalem/dev-suq' },
+  { id: 'copilot', label: 'GitHub Copilot CLI', command: 'copilot plugin marketplace add rtasalem/dev-suq' },
+];
 ---
 
 <section class="getting-started">
   <h2 class="gs-title">Get started</h2>
   <p class="gs-description">Add Dev Suq to your list of marketplaces.</p>
-  <div class="gs-code-block">
-    <code class="gs-command" id="gs-command">{command}</code>
-    <button class="gs-copy-btn" id="gs-copy-btn" type="button" aria-label="Copy command">
-      <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-      </svg>
-      <span class="gs-copy-label">Copy</span>
-    </button>
-  </div>
+  {commands.map(({ id, label, command }) => (
+    <div class="gs-target">
+      <span class="gs-target-label">{label}</span>
+      <div class="gs-code-block">
+        <code class="gs-command" id={`gs-command-${id}`}>{command}</code>
+        <button class="gs-copy-btn" type="button" data-copy-target={`gs-command-${id}`} aria-label={`Copy ${label} command`}>
+          <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="gs-copy-label">Copy</span>
+        </button>
+      </div>
+    </div>
+  ))}
 </section>
 
 <script>
@@ -22,9 +30,9 @@ const command = 'copilot plugin marketplace add rtasalem/dev-suq';
     private btn: HTMLButtonElement;
     private cmd: HTMLElement;
 
-    constructor() {
-      this.btn = document.getElementById('gs-copy-btn') as HTMLButtonElement;
-      this.cmd = document.getElementById('gs-command')!;
+    constructor(btn: HTMLButtonElement) {
+      this.btn = btn;
+      this.cmd = document.getElementById(btn.dataset.copyTarget ?? '')!;
       this.btn.addEventListener('click', () => this.copy());
     }
 
@@ -40,7 +48,7 @@ const command = 'copilot plugin marketplace add rtasalem/dev-suq';
     }
   }
 
-  new GettingStartedCopy();
+  document.querySelectorAll<HTMLButtonElement>('.gs-copy-btn').forEach((btn) => new GettingStartedCopy(btn));
 </script>
 
 <style>
@@ -66,6 +74,19 @@ const command = 'copilot plugin marketplace add rtasalem/dev-suq';
     color: var(--color-text-muted);
   }
 
+  .gs-target {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+  }
+
+  .gs-target-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+  }
+
   .gs-code-block {
     display: flex;
     align-items: center;
@@ -75,10 +96,10 @@ const command = 'copilot plugin marketplace add rtasalem/dev-suq';
     color: var(--color-code-text);
     padding: 0.75rem 1rem;
     border-radius: var(--radius-sm);
-    margin-top: 0.25rem;
   }
 
   .gs-command {
+    overflow-wrap: anywhere;
     font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
     font-size: 0.875rem;
   }

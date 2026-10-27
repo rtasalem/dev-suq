@@ -27,10 +27,12 @@ const { plugins } = Astro.props;
       <ul id="modal-prereqs"></ul>
     </div>
 
-    <div class="modal-install">
+    <h3 class="section-label">Install</h3>
+
+    <div class="modal-install" id="modal-install-claude">
       <div class="install-header">
-        <h3 class="section-label">Install</h3>
-        <button class="copy-btn" id="modal-copy-btn" type="button" aria-label="Copy install command">
+        <span class="install-target">Claude Code</span>
+        <button class="copy-btn" type="button" data-copy-target="modal-install-cmd-claude" aria-label="Copy Claude Code install command">
           <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -38,7 +40,21 @@ const { plugins } = Astro.props;
           <span class="copy-label">Copy</span>
         </button>
       </div>
-      <pre><code id="modal-install-cmd"></code></pre>
+      <pre><code id="modal-install-cmd-claude"></code></pre>
+    </div>
+
+    <div class="modal-install">
+      <div class="install-header">
+        <span class="install-target">GitHub Copilot CLI</span>
+        <button class="copy-btn" type="button" data-copy-target="modal-install-cmd-copilot" aria-label="Copy Copilot install command">
+          <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-label">Copy</span>
+        </button>
+      </div>
+      <pre><code id="modal-install-cmd-copilot"></code></pre>
     </div>
   </div>
 </div>
@@ -57,7 +73,10 @@ const { plugins } = Astro.props;
     author: string;
     keywords: string[];
     prerequisites: string[];
-    installCommand: string;
+    installCommands: {
+      copilot: string;
+      claude?: string;
+    };
   }
 
   class ModalController {
@@ -70,9 +89,10 @@ const { plugins } = Astro.props;
     private tagsEl: HTMLElement;
     private prereqsSection: HTMLElement;
     private prereqsList: HTMLElement;
-    private installCmd: HTMLElement;
+    private claudeInstall: HTMLElement;
+    private claudeInstallCmd: HTMLElement;
+    private copilotInstallCmd: HTMLElement;
     private closeBtn: HTMLElement;
-    private copyBtn: HTMLElement;
     private plugins: PluginData[];
 
     constructor() {
@@ -85,9 +105,10 @@ const { plugins } = Astro.props;
       this.tagsEl = document.getElementById('modal-tags')!;
       this.prereqsSection = document.getElementById('modal-prereqs-section')!;
       this.prereqsList = document.getElementById('modal-prereqs')!;
-      this.installCmd = document.getElementById('modal-install-cmd')!;
+      this.claudeInstall = document.getElementById('modal-install-claude')!;
+      this.claudeInstallCmd = document.getElementById('modal-install-cmd-claude')!;
+      this.copilotInstallCmd = document.getElementById('modal-install-cmd-copilot')!;
       this.closeBtn = this.backdrop.querySelector('.modal-close')!;
-      this.copyBtn = document.getElementById('modal-copy-btn')!;
       this.plugins = (window as any).__PLUGINS__ as PluginData[];
 
       this.bindEvents();
@@ -102,8 +123,10 @@ const { plugins } = Astro.props;
         });
       });
 
-      // Copy button
-      this.copyBtn.addEventListener('click', () => this.copyInstallCommand());
+      // Copy buttons
+      this.backdrop.querySelectorAll<HTMLElement>('.copy-btn').forEach((btn) => {
+        btn.addEventListener('click', () => this.copyInstallCommand(btn));
+      });
 
       // Close handlers
       this.closeBtn.addEventListener('click', () => this.close());
@@ -115,15 +138,15 @@ const { plugins } = Astro.props;
       });
     }
 
-    private async copyInstallCommand(): Promise<void> {
-      const command = this.installCmd.textContent ?? '';
-      await navigator.clipboard.writeText(command);
-      const label = this.copyBtn.querySelector('.copy-label')!;
+    private async copyInstallCommand(btn: HTMLElement): Promise<void> {
+      const target = document.getElementById(btn.dataset.copyTarget ?? '');
+      await navigator.clipboard.writeText(target?.textContent ?? '');
+      const label = btn.querySelector('.copy-label')!;
       label.textContent = 'Copied!';
-      this.copyBtn.classList.add('copied');
+      btn.classList.add('copied');
       setTimeout(() => {
         label.textContent = 'Copy';
-        this.copyBtn.classList.remove('copied');
+        btn.classList.remove('copied');
       }, 2000);
     }
 
@@ -136,7 +159,15 @@ const { plugins } = Astro.props;
       this.versionEl.textContent = plugin.version;
       this.licenseEl.textContent = plugin.license;
       this.authorEl.textContent = plugin.author;
-      this.installCmd.textContent = plugin.installCommand;
+      this.copilotInstallCmd.textContent = plugin.installCommands.copilot;
+
+      // Claude Code install, only for plugins that ship a Claude manifest
+      if (plugin.installCommands.claude) {
+        this.claudeInstall.style.display = 'block';
+        this.claudeInstallCmd.textContent = plugin.installCommands.claude;
+      } else {
+        this.claudeInstall.style.display = 'none';
+      }
 
       // Keywords
       this.tagsEl.innerHTML = plugin.keywords
@@ -301,15 +332,21 @@ const { plugins } = Astro.props;
     margin: 0;
   }
 
+  .modal-install + .modal-install {
+    margin-top: 0.75rem;
+  }
+
+  .install-target {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
   .install-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 0.5rem;
-  }
-
-  .install-header .section-label {
-    margin-bottom: 0;
   }
 
   .copy-btn {

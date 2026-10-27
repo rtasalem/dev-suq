@@ -26,5 +26,8 @@ export interface PluginModalData {
   author: string;
   keywords: string[];
   prerequisites: string[];
-  installCommand: string;
+  installCommands: {
+    copilot: string;
+    claude?: string;
+  };
 }
